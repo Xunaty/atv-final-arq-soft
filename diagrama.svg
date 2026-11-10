@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 720" width="960" height="720" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#C2410C"/>
+    </marker>
+  </defs>
+  <rect width="960" height="720" fill="#FFFFFF"/>
+  <text x="30" y="34" font-size="16" font-weight="bold" fill="#111">Diagrama de containers (C4, nível 2): PoC EduTech orientada a eventos</text>
+
+  <g font-size="14" text-anchor="middle" fill="#111">
+    <circle cx="480" cy="78" r="16" fill="#08427B"/>
+    <rect x="390" y="96" width="180" height="50" rx="10" fill="#08427B"/>
+    <text x="480" y="118" fill="#FFF" font-weight="bold">Estudante</text>
+    <text x="480" y="136" fill="#FFF" font-size="11">[Pessoa]</text>
+
+    <rect x="350" y="200" width="260" height="80" rx="6" fill="#1168BD"/>
+    <text x="480" y="228" fill="#FFF" font-weight="bold">Serviço de Pagamentos</text>
+    <text x="480" y="246" fill="#FFF" font-size="11">[Container: Python + Flask]</text>
+    <text x="480" y="266" fill="#FFF" font-size="11">recebe a cobrança e publica o evento</text>
+
+    <rect x="250" y="340" width="460" height="80" rx="6" fill="#FFEDD5" stroke="#C2410C"/>
+    <text x="480" y="368" font-weight="bold">RabbitMQ</text>
+    <text x="480" y="386" font-size="11">[Container: broker de mensagens]</text>
+    <text x="480" y="406" font-size="12">exchange "eventos" (fanout) com o evento PagamentoAprovado</text>
+
+    <rect x="40" y="480" width="250" height="40" rx="6" fill="#FFF7ED" stroke="#C2410C"/>
+    <text x="165" y="505" font-size="13">fila matriculas</text>
+    <rect x="355" y="480" width="250" height="40" rx="6" fill="#FFF7ED" stroke="#C2410C"/>
+    <text x="480" y="505" font-size="13">fila notificacoes</text>
+    <rect x="670" y="480" width="250" height="40" rx="6" fill="#FFF7ED" stroke="#C2410C"/>
+    <text x="795" y="505" font-size="13">fila relatorios</text>
+
+    <rect x="40" y="570" width="250" height="80" rx="6" fill="#1168BD"/>
+    <text x="165" y="598" fill="#FFF" font-weight="bold">Serviço de Matrículas</text>
+    <text x="165" y="616" fill="#FFF" font-size="11">[Container: Python + pika]</text>
+    <text x="165" y="636" fill="#FFF" font-size="11">confirma a matrícula</text>
+
+    <rect x="355" y="570" width="250" height="80" rx="6" fill="#1168BD"/>
+    <text x="480" y="598" fill="#FFF" font-weight="bold">Serviço de Notificações</text>
+    <text x="480" y="616" fill="#FFF" font-size="11">[Container: Python + pika]</text>
+    <text x="480" y="636" fill="#FFF" font-size="11">envia o e-mail (simulado)</text>
+
+    <rect x="670" y="570" width="250" height="80" rx="6" fill="#1168BD"/>
+    <text x="795" y="598" fill="#FFF" font-weight="bold">Serviço de Relatórios</text>
+    <text x="795" y="616" fill="#FFF" font-size="11">[Container: Python + pika]</text>
+    <text x="795" y="636" fill="#FFF" font-size="11">soma o total arrecadado</text>
+
+    <rect x="750" y="355" width="180" height="50" rx="6" fill="#FEE2E2" stroke="#B91C1C"/>
+    <text x="840" y="377" font-size="13" font-weight="bold">notificacoes_dlq</text>
+    <text x="840" y="395" font-size="11">mensagens que falharam</text>
+  </g>
+
+  <g stroke="#333" stroke-width="1.6" fill="none" marker-end="url(#s)">
+    <line x1="480" y1="146" x2="480" y2="198"/>
+  </g>
+  <g stroke="#C2410C" stroke-width="1.6" fill="none" stroke-dasharray="6 4" marker-end="url(#a)">
+    <line x1="480" y1="280" x2="480" y2="338"/>
+    <line x1="330" y1="420" x2="175" y2="478"/>
+    <line x1="480" y1="420" x2="480" y2="478"/>
+    <line x1="630" y1="420" x2="785" y2="478"/>
+    <line x1="165" y1="520" x2="165" y2="568"/>
+    <line x1="480" y1="520" x2="480" y2="568"/>
+    <line x1="795" y1="520" x2="795" y2="568"/>
+    <line x1="710" y1="380" x2="748" y2="380"/>
+  </g>
+
+  <g font-size="11" fill="#333">
+    <text x="490" y="176">POST /pagamentos (JSON, REST)</text>
+    <text x="490" y="314" fill="#C2410C">publica PagamentoAprovado</text>
+    <text x="840" y="345" fill="#B91C1C" text-anchor="middle">nack de e-mail inválido</text>
+  </g>
+
+  <g font-size="12" fill="#111">
+    <line x1="40" y1="690" x2="90" y2="690" stroke="#333" stroke-width="1.6" marker-end="url(#s)"/>
+    <text x="100" y="694">chamada síncrona (HTTP)</text>
+    <line x1="300" y1="690" x2="350" y2="690" stroke="#C2410C" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a)"/>
+    <text x="360" y="694">mensagem assíncrona (AMQP)</text>
+  </g>
+</svg>

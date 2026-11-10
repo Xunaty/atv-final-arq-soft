@@ -1,0 +1,40 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  pagamentos:
+    build: .
+    command: python pagamentos.py
+    ports:
+      - "5050:5000"
+    depends_on:
+      - rabbitmq
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  matriculas:
+    build: .
+    command: python matriculas.py
+    depends_on:
+      - rabbitmq
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  notificacoes:
+    build: .
+    command: python notificacoes.py
+    depends_on:
+      - rabbitmq
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  relatorios:
+    build: .
+    command: python relatorios.py
+    depends_on:
+      - rabbitmq
+    environment:
+      - PYTHONUNBUFFERED=1
